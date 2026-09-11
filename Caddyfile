@@ -1,3 +1,4 @@
+# Reverse Proxy для доступа к Home Assistant извне
 home.example.com {
     reverse_proxy {local_host}:{local_port} {
         header_up Host {host}
