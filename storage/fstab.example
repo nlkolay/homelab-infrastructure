@@ -1,0 +1,10 @@
+# Физические накопители по постоянным меткам файловой системы
+LABEL=HDD_MAIN   /mnt/disk_main   ext4   defaults,noatime,nodiratime,commit=60   0 2
+LABEL=HDD_AUX1   /mnt/disk_aux1   ext4   defaults,noatime,nodiratime,commit=60   0 2
+LABEL=HDD_CACHE  /mnt/disk_aux2   ext4   defaults,noatime,nodiratime,commit=60   0 2
+LABEL=HDD_TRASH  /mnt/disk_trash  ext4   defaults,noatime,nodiratime,commit=10   0 2
+
+# Пул постоянного хранения MergerFS (sdc + sda)
+# Политика: mfs (Most Free Space) - запись на диск с наибольшим остатком
+# minfreespace=50G - автоматический переход на следующий диск при заполнении
+/mnt/disk_main:/mnt/disk_aux1  /mnt/media_pool  fuse.mergerfs  defaults,nonempty,allow_other,use_ino,cache.files=partial,dropcacheonclose=true,category.create=mfs,minfreespace=50G,fsname=mergerfs_pool  0 0
