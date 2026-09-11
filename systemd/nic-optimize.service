@@ -1,0 +1,12 @@
+[Unit]
+Description=Realtek Gigabit NIC Hardening & Power Management Disable
+After=network.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/nic-optimize.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
