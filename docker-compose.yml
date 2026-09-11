@@ -1,0 +1,112 @@
+version: "3.8"
+services:
+  lampac:
+    image: mcr.microsoft.com/dotnet/aspnet:9.0
+    container_name: lampac
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - ./lampac:/app
+    working_dir: /app
+    entrypoint: ["dotnet", "Lampac.dll"]
+    environment:
+      - TZ=Europe/Moscow
+
+  torrserver:
+    image: ghcr.io/yourok/torrserver:latest
+    container_name: torrserver
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - ./torrserver_db:/ts/db
+    environment:
+      - GOMAXPROCS=4
+
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    network_mode: host
+    restart: unless-stopped
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+    volumes:
+      - ./jellyfin_config:/config
+      - /data/media:/data/media
+      - /jf_cache:/cache
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      - WEBUI_PORT=8080
+      - PUID=0
+      - PGID=0
+    volumes:
+      - ./qb_config:/config
+      - /data/torrents:/data/torrents
+      - /data/media:/data/media
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - ./config/prowlarr:/config
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - ./config/radarr:/config
+      - /data:/data
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - ./config/sonarr:/config
+      - /data:/data
+
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: filebrowser
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - /data:/srv
+      - ./filebrowser.db:/database.db
+    environment:
+      - PUID=0
+      - PGID=0
+
+  homarr:
+    image: ghcr.io/ajnart/homarr:latest
+    container_name: homarr
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - ./config/homarr:/appdata
+
+  uptime-kuma:
+    image: louislam/uptime-kuma:latest
+    container_name: uptime-kuma
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - ./config/uptime-kuma:/app/data
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy/data:/data
