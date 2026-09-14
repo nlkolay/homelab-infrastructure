@@ -65,9 +65,6 @@ homelab-infrastructure/
 ├── storage/
 │   ├── fstab.example              # Пример разметки постоянных меток и пула MergerFS
 │   └── setup-storage.sh           # Скрипт инициализации точек монтирования
-└── systemd/
-    ├── nic-optimize.service       # Юнит systemd для применения сетевых твиков при загрузке
-    └── nic-optimize.sh            # Скрипт отключения EEE и фиксации дуплекса Realtek
 ├── monitoring/
 │   ├── docker-compose.monitoring.yml     # Стек наблюдаемости и логирования
 │   ├── prometheus/
@@ -80,6 +77,9 @@ homelab-infrastructure/
 │       └── provisioning/
 │           └── datasources/
 │               └── datasources.yml       # Автоподключение Prometheus и OpenSearch
+└── systemd/
+    ├── nic-optimize.service       # Юнит systemd для применения сетевых твиков при загрузке
+    └── nic-optimize.sh            # Скрипт отключения EEE и фиксации дуплекса Realtek
 ```
 
 ---
